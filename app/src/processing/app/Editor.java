@@ -2358,6 +2358,12 @@ public abstract class Editor extends JFrame implements RunnerListener {
     internalCloseRunner();
     statusEmpty();
 
+	try {
+		sketch.snapshot();
+	} catch (IOException e) {
+		System.err.println("Failed to save a snapshot.");
+	}
+
     // do this to advance/clear the terminal window / dos prompt / etc
     for (int i = 0; i < 10; i++) System.out.println();
 

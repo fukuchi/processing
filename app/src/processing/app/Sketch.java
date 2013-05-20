@@ -30,6 +30,8 @@ import java.io.*;
 
 import javax.swing.*;
 
+import java.util.Date;
+
 
 /**
  * Stores information about files in the current sketch
@@ -691,6 +693,30 @@ public class Sketch {
     return true;
   }
 
+  /**
+   * Take a snapshot of the current source codeto snapshot folder.
+   */
+  public boolean snapshot() throws IOException {
+    // make sure the user didn't hide the sketch folder
+    ensureExistence();
+
+    // first get the contents of the editor text area
+//    if (current.isModified()) {
+    current.setProgram(editor.getText());
+//    }
+
+    // don't do anything if not actually modified
+    if (!modified) return false;
+
+    if (isReadOnly()) {
+	  return false;
+    }
+
+    for (int i = 0; i < codeCount; i++) {
+      if (code[i].isModified()) code[i].snapshot(new Date(), isUntitled());
+    }
+    return true;
+  }
 
   /**
    * Handles 'Save As' for a sketch.

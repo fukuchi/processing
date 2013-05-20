@@ -29,6 +29,9 @@ import java.io.*;
 import javax.swing.text.Document;
 import javax.swing.undo.*;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 
 /**
  * Represents a single tab of a sketch. 
@@ -295,10 +298,26 @@ public class SketchCode {
   public void save() throws IOException {
     // TODO re-enable history
     //history.record(s, SketchHistory.SAVE);
-
     Base.saveFile(program, file);
     savedProgram = program;
     setModified(false);
+  }
+
+  public void snapshot(Date date, boolean untitled) throws IOException {
+	SimpleDateFormat stamper = new SimpleDateFormat("MM-dd.HH.mm.ss");
+	String parent;
+	if(!untitled) {
+		parent = file.getParent();
+	} else {
+		parent = Preferences.get("sketchbook.path") + File.separator + "_untitled";
+	}
+	File parentFolder = new File(parent + File.separator + "snapshot");
+	String name = file.getName();
+	name = name.substring(0, name.length() - 4);
+	File snapfile = new File(parentFolder.getCanonicalPath() + File.separator + name + "-" + stamper.format(date) + ".pde");
+	System.err.println(snapfile);
+	parentFolder.mkdirs();
+    Base.saveFile(program, snapfile);
   }
 
 
