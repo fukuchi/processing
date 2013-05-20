@@ -568,6 +568,10 @@ public class PdePreprocessor {
     final PrintWriter stream = new PrintWriter(out);
     final int headerOffset = 
       writeImports(stream, programImports, codeFolderImports);
+	String[] prefImports = getDefaultImports();
+	for(String str : prefImports) {
+		programImports.add(str);
+	}
     return new PreprocessorResult(mode, headerOffset + 2, 
                                   write(program, stream), programImports);
   }
@@ -945,9 +949,7 @@ public class PdePreprocessor {
 
   public String[] getDefaultImports() {
     // These may change in-between (if the prefs panel adds this option)
-    //String prefsLine = Preferences.get("preproc.imports");
-    //return PApplet.splitTokens(prefsLine, ", ");
-    return new String[] { 
+	String [] defaultImports = { 
       "java.util.HashMap",
       "java.util.ArrayList",
       "java.io.File",
@@ -957,6 +959,12 @@ public class PdePreprocessor {
       "java.io.OutputStream",
       "java.io.IOException"
     };
+    String prefsLine = Preferences.get("preproc.imports.java");
+	if(prefsLine == null) {
+		return defaultImports;
+	}
+   	String [] prefImports = PApplet.splitTokens(prefsLine, ", ");
+	return PApplet.concat(defaultImports, prefImports);
   }
 
   /**
