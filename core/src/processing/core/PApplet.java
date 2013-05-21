@@ -55,6 +55,8 @@ import java.util.zip.*;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
+import ddf.minim.*;
+
 
 /**
  * Base class for all sketches that use processing.core.
@@ -845,6 +847,12 @@ public class PApplet extends Applet
   //static final boolean CRUSTY_THREADS = false; //true;
 
   /**
+   * Procssing-fms special features
+   */
+
+  public Minim minim; 
+
+  /**
    * Applet initialization. This can do GUI work because the components have
    * not been 'realized' yet: things aren't visible, displayed, etc.
    */
@@ -881,6 +889,8 @@ public class PApplet extends Applet
     looping = true;
     redraw = true;  // draw this guy once
     firstMouse = true;
+
+	minim = new Minim(this);
 
     // these need to be inited before setup
 //    sizeMethods = new RegisteredMethods();
